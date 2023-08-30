@@ -24,12 +24,31 @@ class MyApp extends StatelessWidget {
 class CounterCubit extends Cubit<int> {
   CounterCubit({this.initialData = 0}) : super(initialData);
   int initialData;
+
+  int? current;
+  int? next;
   void tambahData() {
     emit(state + 1);
   }
 
   void kurangData() {
     emit(state - 1);
+  }
+
+  // Observer
+  // Boloc fitur untuk memantau perubahan data
+  @override
+  void onChange(Change<int> change) {
+    super.onChange(change);
+    current = change.currentState;
+    next = change.nextState;
+    print(change);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    print(error);
   }
 }
 
@@ -51,11 +70,33 @@ class MyHome extends StatelessWidget {
               stream: mycounter.stream,
               builder: (context, snapshot) {
                 return Center(
-                  child: Text(
-                    '${snapshot.data}',
-                    style: const TextStyle(
-                      fontSize: 50,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${snapshot.data}',
+                        style: const TextStyle(
+                          fontSize: 50,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Current : ${mycounter.current}',
+                        style: const TextStyle(
+                          fontSize: 50,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Next : ${mycounter.next}',
+                        style: const TextStyle(
+                          fontSize: 50,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }),
