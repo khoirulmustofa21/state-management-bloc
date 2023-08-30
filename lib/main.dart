@@ -35,7 +35,7 @@ class CounterCubit extends Cubit<int> {
 
 class MyHome extends StatelessWidget {
   MyHome({super.key});
-  CounterCubit mycounter = CounterCubit(initialData: 10);
+  CounterCubit mycounter = CounterCubit(initialData: 0);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,27 +47,17 @@ class MyHome extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           StreamBuilder(
+              initialData: mycounter.initialData,
               stream: mycounter.stream,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: Text(
-                      'Loding...',
-                      style: TextStyle(
-                        fontSize: 50,
-                      ),
+                return Center(
+                  child: Text(
+                    '${snapshot.data}',
+                    style: const TextStyle(
+                      fontSize: 50,
                     ),
-                  );
-                } else {
-                  return Center(
-                    child: Text(
-                      '${snapshot.data}',
-                      style: const TextStyle(
-                        fontSize: 50,
-                      ),
-                    ),
-                  );
-                }
+                  ),
+                );
               }),
           const SizedBox(
             height: 20,
