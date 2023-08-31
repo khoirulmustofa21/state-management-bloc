@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:state_management_bloc/bloc/counter.dart';
 
 class MyHome extends StatelessWidget {
-  Counter mycounter = Counter();
+  Counter mycounter = Counter(init: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +15,21 @@ class MyHome extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          StreamBuilder(
-            initialData: mycounter.init,
-            stream: mycounter.stream,
-            builder: (context, snapshot) {
-              return Text(
-                "${snapshot.data}",
-                style: const TextStyle(fontSize: 40),
-              );
-            },
-          ),
+          BlocBuilder<Counter, int>(
+              buildWhen: (prev, current) {
+                if (current % 2 == 0) {
+                  return true;
+                } else {
+                  return false;
+                }
+              },
+              bloc: mycounter,
+              builder: (context, state) {
+                return Text(
+                  "$state",
+                  style: const TextStyle(fontSize: 40),
+                );
+              }),
           const SizedBox(
             height: 50,
           ),
