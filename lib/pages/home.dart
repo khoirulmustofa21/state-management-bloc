@@ -9,27 +9,39 @@ class MyHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BLOC BUILDER'),
+        title: const Text('BLOC LISTENER'),
         centerTitle: true,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          BlocBuilder<Counter, int>(
-              buildWhen: (prev, current) {
-                if (current % 2 == 0) {
-                  return true;
-                } else {
-                  return false;
-                }
-              },
+          BlocListener<Counter, int>(
+            bloc: mycounter,
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  duration: Duration(seconds: 1),
+                  content: Text('DATA GENAP'),
+                ),
+              );
+            },
+            listenWhen: (previous, current) {
+              if (current % 2 == 0) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            child: BlocBuilder<Counter, int>(
               bloc: mycounter,
               builder: (context, state) {
                 return Text(
                   "$state",
                   style: const TextStyle(fontSize: 40),
                 );
-              }),
+              },
+            ),
+          ),
           const SizedBox(
             height: 50,
           ),
