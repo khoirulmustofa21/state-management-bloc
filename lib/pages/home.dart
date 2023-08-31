@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:state_management_bloc/bloc/counter.dart';
 
+// BLOC CONSUMER
+// adalah gabungan dari BlocListener dan BlocBuilder
+
 class MyHome extends StatelessWidget {
   Counter mycounter = Counter(init: 0);
 
@@ -9,20 +12,25 @@ class MyHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BLOC LISTENER'),
+        title: const Text('BLOC CONSUMR'),
         centerTitle: true,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          BlocListener<Counter, int>(
+          BlocConsumer<Counter, int>(
             bloc: mycounter,
-            listener: (context, state) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  duration: Duration(seconds: 1),
-                  content: Text('DATA GENAP'),
-                ),
+            buildWhen: (previous, current) {
+              if (current >= 10) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            builder: (context, state) {
+              return Text(
+                "$state",
+                style: const TextStyle(fontSize: 40),
               );
             },
             listenWhen: (previous, current) {
@@ -32,15 +40,14 @@ class MyHome extends StatelessWidget {
                 return false;
               }
             },
-            child: BlocBuilder<Counter, int>(
-              bloc: mycounter,
-              builder: (context, state) {
-                return Text(
-                  "$state",
-                  style: const TextStyle(fontSize: 40),
-                );
-              },
-            ),
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  duration: Duration(seconds: 1),
+                  content: Text('DATA GENAP'),
+                ),
+              );
+            },
           ),
           const SizedBox(
             height: 50,
