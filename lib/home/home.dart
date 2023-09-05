@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:state_management_bloc/other/other.dart';
 
 import '../bloc/counter.dart';
 import 'merah.dart';
@@ -15,6 +16,20 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('DEPENDCY INJECTION'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // untuk melempar data dari page satu ke pagae dua disarankan mengguankan BlocProvider.value
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => BlocProvider.value(
+                value: mycounter,
+                child: const OtherPage(),
+              ),
+            ),
+          );
+        },
+        child: const Icon(Icons.arrow_forward),
       ),
       body: Center(
         child: Row(
